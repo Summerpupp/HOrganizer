@@ -49,6 +49,9 @@
       --status-disbanded: #a09090;
       --status-disbanded-bg: #f0eded;
 
+      --status-paused: #c49a40;
+      --status-paused-bg: #fdf7e0;
+
       --shadow: 0 2px 12px rgba(58,46,38,0.06);
       --shadow-hover: 0 4px 20px rgba(58,46,38,0.1);
       --radius: 14px;
@@ -206,6 +209,7 @@
     .status-1 { background: var(--status-ongoing-bg); color: var(--status-ongoing); }
     .status-2 { background: var(--status-done-bg); color: var(--status-done); }
     .status-3 { background: var(--status-disbanded-bg); color: var(--status-disbanded); }
+    .status-4 { background: var(--status-paused-bg); color: var(--status-paused); }
 
     .field-module {
       flex: 1;
@@ -590,8 +594,8 @@
 </div>
 
 <script>
-const STATUSES = ['卫星中', '进行中', '已结团', '已散桌'];
-const STATUS_CLASS = ['status-0', 'status-1', 'status-2', 'status-3'];
+const STATUSES = ['卫星中', '进行中', '暂停中', '已结团', '已散桌'];
+const STATUS_CLASS = ['status-0', 'status-1', 'status-2', 'status-3', 'status-4'];
 
 const COL_PALETTE = [
   { dot: '#d4a5b0', bg: '#fdf0f3', border: '#f0d0d8', title: '#a0546a' },
