@@ -352,8 +352,88 @@
       background: var(--accent-soft);
     }
 
-    /* ── Actions bar ── */
-    .actions {
+    /* ── Browser tip banner ── */
+    .tip-banner {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      background: #fffbf0;
+      border: 1px solid #f0dfc0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-family: 'Lato', sans-serif;
+      color: #8a6a30;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: .02em;
+    }
+    .tip-banner .tip-icon { font-size: 15px; flex-shrink: 0; }
+    .tip-banner .tip-close {
+      margin-left: auto;
+      cursor: pointer;
+      opacity: .5;
+      font-size: 14px;
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0 2px;
+    }
+    .tip-banner .tip-close:hover { opacity: 1; }
+
+    /* ── Export mode selector ── */
+    .export-mode {
+      max-width: 1200px;
+      margin: 16px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .mode-label {
+      font-size: 12px;
+      font-family: 'Lato', sans-serif;
+      color: var(--text-muted);
+      letter-spacing: .03em;
+      white-space: nowrap;
+    }
+    .mode-options {
+      display: flex;
+      gap: 6px;
+    }
+    .mode-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      transition: all .15s;
+      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      line-height: 1.3;
+    }
+    .mode-btn .mode-tag {
+      font-size: 9px;
+      font-weight: 400;
+      opacity: .7;
+      letter-spacing: .02em;
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .mode-btn.active .mode-tag { opacity: .85; }
+    .mode-btn:not(.active):hover { border-color: var(--accent); color: var(--accent); }
       max-width: 960px;
       margin: 20px auto 0;
       display: flex;
@@ -418,30 +498,39 @@
       position: fixed;
       left: -9999px;
       top: 0;
-      width: 1028px;
+      width: 750px;
       background: var(--bg);
-      padding: 24px 16px 32px;
+      padding: 36px 28px 40px;
       font-family: 'Noto Serif SC', serif;
       color: var(--text-primary);
     }
     #snapshot .snap-title {
       text-align: center;
-      font-size: 20px;
+      font-size: 26px;
       font-weight: 700;
-      letter-spacing: .08em;
-      margin-bottom: 4px;
+      letter-spacing: .1em;
+      margin-bottom: 6px;
+    }
+    #snapshot .snap-title::after {
+      content: '';
+      display: block;
+      margin: 8px auto 0;
+      width: 48px; height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
     }
     #snapshot .snap-sub {
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
       font-family: 'Lato', sans-serif;
-      margin-bottom: 18px;
+      margin-top: 10px;
+      margin-bottom: 24px;
     }
     #snapshot .snap-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
     #snapshot .snap-col {
       border-radius: 12px;
@@ -449,43 +538,25 @@
       border: 1.5px solid;
     }
     #snapshot .snap-col-h {
-      padding: 8px 12px;
-      font-size: 13px;
+      padding: 10px 14px;
+      font-size: 14px;
       font-weight: 700;
       letter-spacing: .06em;
-      display: flex; align-items: center; gap: 7px;
+      display: flex; align-items: center; gap: 8px;
     }
-    #snapshot .snap-col-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+    #snapshot .snap-col-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
     #snapshot .snap-entry {
       background: var(--surface2);
       border: 1px solid var(--border-soft);
       border-radius: 8px;
-      padding: 7px 9px;
+      padding: 9px 11px;
     }
-    #snapshot .snap-mod-row { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
-    #snapshot .snap-mod-name { font-size: 12px; font-weight: 500; }
-    #snapshot .snap-char { font-size: 11px; color: var(--text-secondary); }
-    #snapshot .snap-empty { font-size: 11px; color: var(--text-muted); font-style: italic; text-align: center; padding: 6px 0; }
-
-    /* Column color theming for snapshot */
-    #snapshot .snap-col:nth-child(1) { border-color: var(--ho1-border); }
-    #snapshot .snap-col:nth-child(1) .snap-col-h { background: var(--ho1-bg); color: #a0546a; }
-    #snapshot .snap-col:nth-child(1) .snap-dot { background: var(--ho1); }
-    #snapshot .snap-col:nth-child(2) { border-color: var(--ho2-border); }
-    #snapshot .snap-col:nth-child(2) .snap-col-h { background: var(--ho2-bg); color: #4a6a9a; }
-    #snapshot .snap-col:nth-child(2) .snap-dot { background: var(--ho2); }
-    #snapshot .snap-col:nth-child(3) { border-color: var(--ho3-border); }
-    #snapshot .snap-col:nth-child(3) .snap-col-h { background: var(--ho3-bg); color: #4a844a; }
-    #snapshot .snap-col:nth-child(3) .snap-dot { background: var(--ho3); }
-    #snapshot .snap-col:nth-child(4) { border-color: var(--ho4-border); }
-    #snapshot .snap-col:nth-child(4) .snap-col-h { background: var(--ho4-bg); color: #7a6050; }
-    #snapshot .snap-col:nth-child(4) .snap-dot { background: var(--ho4); }
-    #snapshot .snap-col:nth-child(5) { border-color: var(--ho5-border); }
-    #snapshot .snap-col:nth-child(5) .snap-col-h { background: var(--ho5-bg); color: #5a5878; }
-    #snapshot .snap-col:nth-child(5) .snap-dot { background: var(--ho5); }
-
-    #snapshot .snap-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    #snapshot .snap-footer { text-align: center; margin-top: 14px; font-size: 10px; color: var(--text-muted); font-family: 'Lato', sans-serif; }
+    #snapshot .snap-mod-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+    #snapshot .snap-mod-name { font-size: 13px; font-weight: 500; }
+    #snapshot .snap-char { font-size: 12px; color: var(--text-secondary); }
+    #snapshot .snap-empty { font-size: 12px; color: var(--text-muted); font-style: italic; text-align: center; padding: 8px 0; }
+    #snapshot .snap-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    #snapshot .snap-footer { text-align: center; margin-top: 20px; font-size: 11px; color: var(--text-muted); font-family: 'Lato', sans-serif; }
 
     /* ── Image preview modal ── */
     #img-modal {
@@ -569,8 +640,28 @@
   <div class="header-sub">拖动栏目标题可排序 · 点击状态标签切换 · 悬停条目可移动或删除</div>
 </div>
 
+<div class="tip-banner" id="tipBanner">
+  <span class="tip-icon">💡</span>
+  建议使用手机<strong>默认浏览器</strong>打开本工具，出现 bug 的概率最小。在微信、QQ 等 App 内置浏览器中使用可能出现保存图片失败等问题。
+  <button class="tip-close" onclick="document.getElementById('tipBanner').style.display='none'">✕</button>
+</div>
+
 <div class="grid" id="mainGrid">
   <!-- Columns injected by JS -->
+</div>
+
+<div class="export-mode">
+  <span class="mode-label">图片样式：</span>
+  <div class="mode-options">
+    <button class="mode-btn active" id="modeWide" onclick="setMode('wide')">
+      横向宽图
+      <span class="mode-tag">通用 / 电脑端</span>
+    </button>
+    <button class="mode-btn" id="modeLong" onclick="setMode('long')">
+      竖向长图
+      <span class="mode-tag">推荐 QQ 空间</span>
+    </button>
+  </div>
 </div>
 
 <div class="actions">
@@ -783,40 +874,86 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2400);
 }
 
+let exportMode = 'wide'; // 'wide' | 'long'
+
+function setMode(mode) {
+  exportMode = mode;
+  document.getElementById('modeWide').classList.toggle('active', mode === 'wide');
+  document.getElementById('modeLong').classList.toggle('active', mode === 'long');
+}
+
 function buildSnapshot() {
   const snap = document.getElementById('snapshot');
   const now = new Date();
   const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
-  const n = columns.length;
-  let gridHtml = `<div class="snap-grid" style="grid-template-columns:repeat(${n},1fr)">`;
-  columns.forEach((col, ci) => {
-    const s = getStyle(ci);
-    const colName = col.name || '（未命名）';
-    let entriesHtml = col.entries.length === 0
-      ? '<div class="snap-empty">暂无条目</div>'
-      : col.entries.map(e => `
-          <div class="snap-entry">
-            <div class="snap-mod-row">
-              <span class="status-badge ${STATUS_CLASS[e.status]}" style="font-size:9px;padding:1px 6px;">${STATUSES[e.status]}</span>
-              <span class="snap-mod-name">${escHtml(e.module||'（未命名模组）')}</span>
-            </div>
-            ${e.character?`<div class="snap-char">角色：${escHtml(e.character)}</div>`:''}`
-        + `</div>`).join('');
-    gridHtml += `
-      <div class="snap-col" style="border-color:${s.border}">
-        <div class="snap-col-h" style="background:${s.bg};color:${s.title}">
-          <span class="snap-dot" style="background:${s.dot}"></span>${escHtml(colName)}
-        </div>
-        <div class="snap-col-body">${entriesHtml}</div>
-      </div>`;
-  });
-  gridHtml += '</div>';
-  snap.innerHTML = `
-    <div class="snap-title">Ho 位整理表</div>
-    <div class="snap-sub">${dateStr}</div>
-    ${gridHtml}
-    <div class="snap-footer">generated with 素米Summeee的Ho位整理表</div>
-  `;
+
+  if (exportMode === 'long') {
+    // ── Long image: 750px wide, 2-col grid ──
+    snap.style.width = '750px';
+    snap.style.padding = '36px 28px 40px';
+    const n = columns.length;
+    let gridHtml = `<div class="snap-grid">`;
+    columns.forEach((col, ci) => {
+      const s = getStyle(ci);
+      const colName = col.name || '（未命名）';
+      let entriesHtml = col.entries.length === 0
+        ? '<div class="snap-empty">暂无条目</div>'
+        : col.entries.map(e => `
+            <div class="snap-entry">
+              <div class="snap-mod-row">
+                <span class="status-badge ${STATUS_CLASS[e.status]}" style="font-size:9px;padding:1px 6px;">${STATUSES[e.status]}</span>
+                <span class="snap-mod-name">${escHtml(e.module||'（未命名模组）')}</span>
+              </div>
+              ${e.character?`<div class="snap-char">角色：${escHtml(e.character)}</div>`:''}</div>`).join('');
+      gridHtml += `
+        <div class="snap-col" style="border-color:${s.border}">
+          <div class="snap-col-h" style="background:${s.bg};color:${s.title}">
+            <span class="snap-dot" style="background:${s.dot}"></span>${escHtml(colName)}
+          </div>
+          <div class="snap-col-body">${entriesHtml}</div>
+        </div>`;
+    });
+    gridHtml += '</div>';
+    snap.innerHTML = `
+      <div class="snap-title">Ho 位整理表</div>
+      <div class="snap-sub">${dateStr}</div>
+      ${gridHtml}
+      <div class="snap-footer">generated with 素米Summeee的Ho位整理表</div>
+    `;
+  } else {
+    // ── Wide image: 1028px wide, all cols in one row ──
+    snap.style.width = '1028px';
+    snap.style.padding = '24px 16px 32px';
+    const n = columns.length;
+    let gridHtml = `<div class="snap-grid" style="grid-template-columns:repeat(${n},1fr)">`;
+    columns.forEach((col, ci) => {
+      const s = getStyle(ci);
+      const colName = col.name || '（未命名）';
+      let entriesHtml = col.entries.length === 0
+        ? '<div class="snap-empty">暂无条目</div>'
+        : col.entries.map(e => `
+            <div class="snap-entry">
+              <div class="snap-mod-row">
+                <span class="status-badge ${STATUS_CLASS[e.status]}" style="font-size:9px;padding:1px 6px;">${STATUSES[e.status]}</span>
+                <span class="snap-mod-name">${escHtml(e.module||'（未命名模组）')}</span>
+              </div>
+              ${e.character?`<div class="snap-char">角色：${escHtml(e.character)}</div>`:''}</div>`).join('');
+      gridHtml += `
+        <div class="snap-col" style="border-color:${s.border}">
+          <div class="snap-col-h" style="background:${s.bg};color:${s.title}">
+            <span class="snap-dot" style="background:${s.dot}"></span>${escHtml(colName)}
+          </div>
+          <div class="snap-col-body">${entriesHtml}</div>
+        </div>`;
+    });
+    gridHtml += '</div>';
+    snap.innerHTML = `
+      <div class="snap-title">Ho 位整理表</div>
+      <div class="snap-sub">${dateStr}</div>
+      ${gridHtml}
+      <div class="snap-footer">generated with 素米Summeee的Ho位整理表</div>
+    `;
+  }
 }
 
 let _currentDataUrl = null;
@@ -825,9 +962,14 @@ function exportImage() {
   buildSnapshot();
   const loading = document.getElementById('loading');
   loading.classList.add('show');
+  const isLong = exportMode === 'long';
   setTimeout(() => {
     html2canvas(document.getElementById('snapshot'), {
-      scale: 3, useCORS: true, backgroundColor: '#f5f0eb', logging: false, width: 1028,
+      scale: isLong ? 2 : 2,
+      useCORS: true,
+      backgroundColor: '#f5f0eb',
+      logging: false,
+      width: isLong ? 750 : 1028,
     }).then(canvas => {
       loading.classList.remove('show');
       const dataUrl = canvas.toDataURL('image/png');
