@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ho位整理表</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --surface: #fffdf9;
+      --surface2: #faf6f1;
+      --border: #e8dfd4;
+      --border-soft: #f0e8e0;
+      --text-primary: #3a2e26;
+      --text-secondary: #8a7a6e;
+      --text-muted: #b8a89a;
+      --accent: #c2846a;
+      --accent-soft: #f0e0d8;
+
+      --ho1: #d4a5b0;
+      --ho1-bg: #fdf0f3;
+      --ho1-border: #f0d0d8;
+
+      --ho2: #a5b8d4;
+      --ho2-bg: #f0f4fd;
+      --ho2-border: #d0daf0;
+
+      --ho3: #a5c4a5;
+      --ho3-bg: #f0faf0;
+      --ho3-border: #d0ead0;
+
+      --ho4: #c4b4a5;
+      --ho4-bg: #faf4f0;
+      --ho4-border: #e8ddd4;
+
+      --ho5: #b0aec8;
+      --ho5-bg: #f4f3fa;
+      --ho5-border: #dddaf0;
+
+      --status-satellite: #7db5d4;
+      --status-satellite-bg: #e8f4fc;
+      --status-ongoing: #7db87d;
+      --status-ongoing-bg: #e8f5e8;
+      --status-done: #c4a040;
+      --status-done-bg: #fdf5e0;
+      --status-disbanded: #a09090;
+      --status-disbanded-bg: #f0eded;
+
+      --shadow: 0 2px 12px rgba(58,46,38,0.06);
+      --shadow-hover: 0 4px 20px rgba(58,46,38,0.1);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Serif SC', 'Lato', serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .header-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--text-primary);
+      position: relative;
+      display: inline-block;
+    }
+    .header-title::after {
+      content: '';
+      display: block;
+      margin: 6px auto 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .header-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      letter-spacing: .04em;
+      font-weight: 300;
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Column card ── */
+    .col-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .col-card:hover { box-shadow: var(--shadow-hover); }
+
+    .col-header {
+      padding: 12px 14px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .col-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .col-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .col-card:nth-child(1) .col-dot { background: var(--ho1); }
+    .col-card:nth-child(1) .col-title { color: #a0546a; }
+    .col-card:nth-child(1) .col-header { background: var(--ho1-bg); }
+    .col-card:nth-child(1) { border-color: var(--ho1-border); }
+
+    .col-card:nth-child(2) .col-dot { background: var(--ho2); }
+    .col-card:nth-child(2) .col-title { color: #4a6a9a; }
+    .col-card:nth-child(2) .col-header { background: var(--ho2-bg); }
+    .col-card:nth-child(2) { border-color: var(--ho2-border); }
+
+    .col-card:nth-child(3) .col-dot { background: var(--ho3); }
+    .col-card:nth-child(3) .col-title { color: #4a844a; }
+    .col-card:nth-child(3) .col-header { background: var(--ho3-bg); }
+    .col-card:nth-child(3) { border-color: var(--ho3-border); }
+
+    .col-card:nth-child(4) .col-dot { background: var(--ho4); }
+    .col-card:nth-child(4) .col-title { color: #7a6050; }
+    .col-card:nth-child(4) .col-header { background: var(--ho4-bg); }
+    .col-card:nth-child(4) { border-color: var(--ho4-border); }
+
+    .col-card:nth-child(5) .col-dot { background: var(--ho5); }
+    .col-card:nth-child(5) .col-title { color: #5a5878; }
+    .col-card:nth-child(5) .col-header { background: var(--ho5-bg); }
+    .col-card:nth-child(5) { border-color: var(--ho5-border); }
+
+    .entries-list {
+      flex: 1;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ── Entry ── */
+    .entry {
+      background: var(--surface2);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: 9px 8px 9px 10px;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      gap: 4px;
+      align-items: stretch;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .entry:hover { border-color: var(--border); }
+    .entry:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(194,132,106,0.1);
+    }
+    .entry-main { flex: 1; min-width: 0; }
+
+    .entry-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .status-badge {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      transition: opacity .15s, transform .1s;
+      letter-spacing: .02em;
+    }
+    .status-badge:hover { opacity: .8; transform: scale(1.04); }
+    .status-badge:active { transform: scale(.96); }
+
+    .status-0 { background: var(--status-satellite-bg); color: var(--status-satellite); }
+    .status-1 { background: var(--status-ongoing-bg); color: var(--status-ongoing); }
+    .status-2 { background: var(--status-done-bg); color: var(--status-done); }
+    .status-3 { background: var(--status-disbanded-bg); color: var(--status-disbanded); }
+
+    .field-module {
+      flex: 1;
+      min-width: 0;
+    }
+
+    input.text-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Noto Serif SC', serif;
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+    input.text-input::placeholder { color: var(--text-muted); }
+
+    .field-char {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding-left: 2px;
+    }
+    .char-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      font-family: 'Lato', sans-serif;
+    }
+    input.char-input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Noto Serif SC', serif;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+    input.char-input::placeholder { color: var(--text-muted); }
+
+    /* ── Entry controls (move up/down + delete) ── */
+    .entry-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2px;
+      opacity: 0.25;
+      transition: opacity .15s;
+      flex-shrink: 0;
+    }
+    .entry:hover .entry-controls,
+    .entry:focus-within .entry-controls { opacity: 1; }
+    @media (hover: none) {
+      .entry-controls { opacity: 0.5; }
+    }
+    .btn-ctrl {
+      width: 18px; height: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 4px;
+      transition: background .15s, color .15s;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .btn-ctrl:hover { background: var(--border); color: var(--text-secondary); }
+    .btn-ctrl-del:hover { background: #f5e0dc; color: #c05050; }
+    .btn-ctrl:disabled { opacity: 0.2; cursor: default; }
+    .btn-ctrl:disabled:hover { background: none; color: var(--text-muted); }
+
+    /* ── Add button ── */
+    .btn-add {
+      margin: 4px 10px 10px;
+      background: none;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: 'Lato', sans-serif;
+      padding: 7px;
+      cursor: pointer;
+      width: calc(100% - 20px);
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      transition: border-color .15s, color .15s, background .15s;
+      letter-spacing: .02em;
+    }
+    .btn-add:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* ── Actions bar ── */
+    .actions {
+      max-width: 960px;
+      margin: 20px auto 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-action {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(194,132,106,0.3);
+    }
+    .btn-primary:hover {
+      background: #b07258;
+      box-shadow: 0 4px 16px rgba(194,132,106,0.4);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-secondary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--text-primary);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s, transform .3s;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Export snapshot (hidden, used for capture) ── */
+    #snapshot {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+      width: 6000px;
+      background: var(--bg);
+      padding: 24px 16px 32px;
+      font-family: 'Noto Serif SC', serif;
+      color: var(--text-primary);
+    }
+    #snapshot .snap-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin-bottom: 4px;
+    }
+    #snapshot .snap-sub {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'Lato', sans-serif;
+      margin-bottom: 18px;
+    }
+    #snapshot .snap-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    #snapshot .snap-col {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1.5px solid;
+    }
+    #snapshot .snap-col-h {
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      display: flex; align-items: center; gap: 7px;
+    }
+    #snapshot .snap-col-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+    #snapshot .snap-entry {
+      background: var(--surface2);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 7px 9px;
+    }
+    #snapshot .snap-mod-row { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+    #snapshot .snap-mod-name { font-size: 12px; font-weight: 500; }
+    #snapshot .snap-char { font-size: 11px; color: var(--text-secondary); }
+    #snapshot .snap-empty { font-size: 11px; color: var(--text-muted); font-style: italic; text-align: center; padding: 6px 0; }
+
+    /* Column color theming for snapshot */
+    #snapshot .snap-col:nth-child(1) { border-color: var(--ho1-border); }
+    #snapshot .snap-col:nth-child(1) .snap-col-h { background: var(--ho1-bg); color: #a0546a; }
+    #snapshot .snap-col:nth-child(1) .snap-dot { background: var(--ho1); }
+    #snapshot .snap-col:nth-child(2) { border-color: var(--ho2-border); }
+    #snapshot .snap-col:nth-child(2) .snap-col-h { background: var(--ho2-bg); color: #4a6a9a; }
+    #snapshot .snap-col:nth-child(2) .snap-dot { background: var(--ho2); }
+    #snapshot .snap-col:nth-child(3) { border-color: var(--ho3-border); }
+    #snapshot .snap-col:nth-child(3) .snap-col-h { background: var(--ho3-bg); color: #4a844a; }
+    #snapshot .snap-col:nth-child(3) .snap-dot { background: var(--ho3); }
+    #snapshot .snap-col:nth-child(4) { border-color: var(--ho4-border); }
+    #snapshot .snap-col:nth-child(4) .snap-col-h { background: var(--ho4-bg); color: #7a6050; }
+    #snapshot .snap-col:nth-child(4) .snap-dot { background: var(--ho4); }
+    #snapshot .snap-col:nth-child(5) { border-color: var(--ho5-border); }
+    #snapshot .snap-col:nth-child(5) .snap-col-h { background: var(--ho5-bg); color: #5a5878; }
+    #snapshot .snap-col:nth-child(5) .snap-dot { background: var(--ho5); }
+
+    #snapshot .snap-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    #snapshot .snap-footer { text-align: center; margin-top: 14px; font-size: 10px; color: var(--text-muted); font-family: 'Lato', sans-serif; }
+
+    /* ── Image preview modal ── */
+    #img-modal {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(30,22,18,0.82);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      align-items: center; justify-content: center;
+      flex-direction: column;
+      padding: 24px 16px;
+    }
+    #img-modal.show { display: flex; }
+    .modal-hint {
+      color: rgba(255,255,255,0.9);
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      letter-spacing: .04em;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .modal-hint span { font-size: 18px; }
+    #modal-img {
+      max-width: 100%;
+      max-height: 65vh;
+      border-radius: 14px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      display: block;
+      -webkit-touch-callout: default; /* allow long-press save on iOS */
+    }
+    .modal-actions {
+      display: flex; gap: 10px; margin-top: 16px;
+    }
+    .btn-modal {
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      letter-spacing: .04em;
+    }
+    .btn-modal-share {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(194,132,106,0.4);
+    }
+    .btn-modal-close {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.25);
+    }
+
+    /* Loading overlay */
+    #loading {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(245,240,235,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 14px;
+    }
+    #loading.show { display: flex; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 13px; color: var(--text-secondary); font-family: 'Lato', sans-serif; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Ho 位整理表</div>
+  <div class="header-sub">点击状态标签切换 · 悬停条目可上下移动或删除</div>
+</div>
+
+<div class="grid" id="mainGrid">
+  <!-- Columns injected by JS -->
+</div>
+
+<div class="actions">
+  <button class="btn-action btn-primary" onclick="exportImage()">📷 保存为图片</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="loading"><div class="spinner"></div><div class="loading-text">正在生成图片…</div></div>
+<div id="snapshot"></div>
+
+<!-- Image preview modal -->
+<div id="img-modal">
+  <div class="modal-hint"><span>👆</span> 长按图片可保存到相册</div>
+  <img id="modal-img" src="" alt="Ho位整理表" />
+  <div class="modal-actions">
+    <button class="btn-modal btn-modal-share" id="btn-share" style="display:none" onclick="shareImage()">🔗 分享</button>
+    <button class="btn-modal btn-modal-close" onclick="closeModal()">✕ 关闭</button>
+  </div>
+</div>
+
+<script>
+const STATUSES = ['卫星中', '进行中', '已结团', '已散桌'];
+const STATUS_CLASS = ['status-0', 'status-1', 'status-2', 'status-3'];
+const HO_NAMES = ['Ho1', 'Ho2', 'Ho3', 'Ho4', '无Ho'];
+
+// State: array of columns, each column has array of entries
+let data = HO_NAMES.map(() => []);
+
+function makeEntry() {
+  return { module: '', character: '', status: 0 };
+}
+
+function saveState() {
+  try { localStorage.setItem('ho_table', JSON.stringify(data)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('ho_table');
+    if (s) {
+      const loaded = JSON.parse(s);
+      // Migrate: ensure we have 5 columns
+      data = HO_NAMES.map((_, i) => loaded[i] || []);
+    }
+  } catch(e) {}
+}
+
+function render() {
+  const grid = document.getElementById('mainGrid');
+  grid.innerHTML = '';
+  data.forEach((col, ci) => {
+    const card = document.createElement('div');
+    card.className = 'col-card';
+    card.innerHTML = `
+      <div class="col-header">
+        <span class="col-title"><span class="col-dot"></span>${HO_NAMES[ci]}</span>
+      </div>
+      <div class="entries-list" id="list-${ci}"></div>
+      <button class="btn-add" onclick="addEntry(${ci})">＋ 添加条目</button>
+    `;
+    grid.appendChild(card);
+
+    const list = document.getElementById(`list-${ci}`);
+    col.forEach((entry, ei) => {
+      const div = document.createElement('div');
+      div.className = 'entry';
+      const isFirst = ei === 0;
+      const isLast = ei === col.length - 1;
+      div.innerHTML = `
+        <div class="entry-main">
+          <div class="entry-top">
+            <span class="status-badge ${STATUS_CLASS[entry.status]}" onclick="cycleStatus(${ci},${ei})">${STATUSES[entry.status]}</span>
+            <div class="field-module">
+              <input class="text-input" type="text" placeholder="模组名…"
+                value="${escHtml(entry.module)}"
+                oninput="updateField(${ci},${ei},'module',this.value)" />
+            </div>
+          </div>
+          <div class="field-char">
+            <span class="char-label">角色</span>
+            <input class="char-input" type="text" placeholder="角色名…"
+              value="${escHtml(entry.character)}"
+              oninput="updateField(${ci},${ei},'character',this.value)" />
+          </div>
+        </div>
+        <div class="entry-controls">
+          <button class="btn-ctrl btn-ctrl-move" title="上移" onclick="moveEntry(${ci},${ei},-1)" ${isFirst ? 'disabled' : ''}>↑</button>
+          <button class="btn-ctrl btn-ctrl-del" title="删除" onclick="deleteEntry(${ci},${ei})">✕</button>
+          <button class="btn-ctrl btn-ctrl-move" title="下移" onclick="moveEntry(${ci},${ei},1)" ${isLast ? 'disabled' : ''}>↓</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+    if (col.length === 0) {
+      list.innerHTML = `<div style="text-align:center;padding:14px 0;font-size:12px;color:var(--text-muted)">暂无条目</div>`;
+    }
+  });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function addEntry(ci) {
+  data[ci].push(makeEntry());
+  saveState();
+  render();
+  setTimeout(() => {
+    const list = document.getElementById(`list-${ci}`);
+    const inputs = list.querySelectorAll('input.text-input');
+    if (inputs.length) inputs[inputs.length-1].focus();
+  }, 30);
+}
+
+function deleteEntry(ci, ei) {
+  data[ci].splice(ei, 1);
+  saveState();
+  render();
+}
+
+function moveEntry(ci, ei, dir) {
+  const col = data[ci];
+  const target = ei + dir;
+  if (target < 0 || target >= col.length) return;
+  [col[ei], col[target]] = [col[target], col[ei]];
+  saveState();
+  render();
+}
+
+function cycleStatus(ci, ei) {
+  data[ci][ei].status = (data[ci][ei].status + 1) % STATUSES.length;
+  saveState();
+  render();
+}
+
+function updateField(ci, ei, field, val) {
+  data[ci][ei][field] = val;
+  saveState();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function buildSnapshot() {
+  const snap = document.getElementById('snapshot');
+  // Build date string
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+
+  let gridHtml = '<div class="snap-grid">';
+  data.forEach((col, ci) => {
+    let entriesHtml = '';
+    if (col.length === 0) {
+      entriesHtml = '<div class="snap-empty">暂无条目</div>';
+    } else {
+      col.forEach(e => {
+        entriesHtml += `
+          <div class="snap-entry">
+            <div class="snap-mod-row">
+              <span class="status-badge ${STATUS_CLASS[e.status]}" style="font-size:9px;padding:1px 6px;">${STATUSES[e.status]}</span>
+              <span class="snap-mod-name">${escHtml(e.module || '（未命名模组）')}</span>
+            </div>
+            ${e.character ? `<div class="snap-char">角色：${escHtml(e.character)}</div>` : ''}
+          </div>`;
+      });
+    }
+    gridHtml += `
+      <div class="snap-col">
+        <div class="snap-col-h"><span class="snap-dot"></span>${HO_NAMES[ci]}</div>
+        <div class="snap-col-body">${entriesHtml}</div>
+      </div>`;
+  });
+  gridHtml += '</div>';
+
+  snap.innerHTML = `
+    <div class="snap-title">Ho 位整理表</div>
+    <div class="snap-sub">${dateStr}</div>
+    ${gridHtml}
+    <div class="snap-footer">generated with 素米Summeee的Ho位整理表</div>
+  `;
+}
+
+let _currentBlob = null;
+
+function exportImage() {
+  buildSnapshot();
+  const loading = document.getElementById('loading');
+  loading.classList.add('show');
+
+  setTimeout(() => {
+    html2canvas(document.getElementById('snapshot'), {
+      scale: 1,
+      useCORS: true,
+      backgroundColor: '#f5f0eb',
+      logging: false,
+      width: 6000,
+    }).then(canvas => {
+      loading.classList.remove('show');
+      canvas.toBlob(blob => {
+        _currentBlob = blob;
+        const url = URL.createObjectURL(blob);
+        const modalImg = document.getElementById('modal-img');
+        modalImg.src = url;
+
+        // Show share button only if Web Share API supports files
+        const shareBtn = document.getElementById('btn-share');
+        if (navigator.canShare && navigator.share) {
+          shareBtn.style.display = 'inline-flex';
+        } else {
+          shareBtn.style.display = 'none';
+        }
+
+        document.getElementById('img-modal').classList.add('show');
+      }, 'image/png');
+    }).catch(err => {
+      loading.classList.remove('show');
+      showToast('⚠ 导出失败，请重试');
+      console.error(err);
+    });
+  }, 100);
+}
+
+function closeModal() {
+  document.getElementById('img-modal').classList.remove('show');
+  const img = document.getElementById('modal-img');
+  if (img.src) URL.revokeObjectURL(img.src);
+  img.src = '';
+  _currentBlob = null;
+}
+
+async function shareImage() {
+  if (!_currentBlob) return;
+  const file = new File([_currentBlob], 'Ho位整理表.png', { type: 'image/png' });
+  try {
+    await navigator.share({ files: [file], title: 'Ho位整理表' });
+  } catch(e) {
+    if (e.name !== 'AbortError') showToast('⚠ 分享失败');
+  }
+}
+
+// Close modal on backdrop click
+document.getElementById('img-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Init
+loadState();
+render();
+</script>
+</body>
+</html>
