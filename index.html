@@ -653,6 +653,114 @@
       border: 1.5px solid rgba(255,255,255,0.25);
     }
 
+    /* ── Data backup bar ── */
+    .data-bar {
+      max-width: 1200px;
+      margin: 10px auto 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .data-bar-label {
+      font-size: 11px;
+      font-family: 'Lato', sans-serif;
+      color: var(--text-muted);
+      letter-spacing: .03em;
+      margin-right: 2px;
+    }
+    .btn-data {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      letter-spacing: .03em;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      transition: all .15s;
+    }
+    .btn-data:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+    /* ── Data modal ── */
+    #data-modal {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(30,22,18,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 300;
+      align-items: center; justify-content: center;
+      padding: 24px 16px;
+    }
+    #data-modal.show { display: flex; }
+    .data-modal-box {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .data-modal-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: .04em;
+    }
+    .data-modal-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: 'Lato', sans-serif;
+      line-height: 1.6;
+    }
+    .data-modal-hint strong { color: var(--accent); }
+    #dataTextarea {
+      width: 100%;
+      height: 160px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: 'Lato', monospace;
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: var(--bg);
+      resize: vertical;
+      outline: none;
+      line-height: 1.5;
+    }
+    #dataTextarea:focus { border-color: var(--accent); }
+    .data-modal-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .btn-data-modal {
+      flex: 1;
+      padding: 9px 16px;
+      border-radius: 24px;
+      font-size: 12.5px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      transition: all .15s;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .btn-data-modal:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-data-modal.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn-data-modal.primary:hover { background: #b07258; }
+
     /* Loading overlay */
     #loading {
       display: none;
@@ -715,9 +823,26 @@
   </button>
 </div>
 
+<div class="data-bar">
+  <span class="data-bar-label">数据备份</span>
+  <button class="btn-data" onclick="exportData()">⬇ 导出数据</button>
+  <button class="btn-data" onclick="openDataModal('import')">⬆ 导入数据</button>
+  <input type="file" id="importInput" accept=".json" style="display:none" onchange="importData(event)" />
+</div>
+
 <div class="toast" id="toast"></div>
 <div id="loading"><div class="spinner"></div><div class="loading-text">正在生成图片…</div></div>
 <div id="snapshot"></div>
+
+<!-- Data backup modal -->
+<div id="data-modal">
+  <div class="data-modal-box">
+    <div class="data-modal-title" id="dataModalTitle">导出数据</div>
+    <div class="data-modal-hint" id="dataModalHint"></div>
+    <textarea id="dataTextarea" spellcheck="false"></textarea>
+    <div class="data-modal-actions" id="dataModalActions"></div>
+  </div>
+</div>
 
 <!-- Image preview modal -->
 <div id="img-modal">
@@ -914,6 +1039,149 @@ function addCustomColumn() {
   }, 30);
 }
 
+function openDataModal(mode) {
+  const modal = document.getElementById('data-modal');
+  const title = document.getElementById('dataModalTitle');
+  const hint = document.getElementById('dataModalHint');
+  const ta = document.getElementById('dataTextarea');
+  const actions = document.getElementById('dataModalActions');
+
+  modal.classList.add('show');
+
+  if (mode === 'export') {
+    const json = buildExportJson();
+    title.textContent = '导出数据';
+    hint.innerHTML = '以下是你的数据。<strong>点击「复制」</strong>后保存到备忘录或文档中，下次选择「导入」并粘贴即可还原。<br>部分浏览器也支持直接点「下载文件」。';
+    ta.value = json;
+    ta.readOnly = true;
+    actions.innerHTML = `
+      <button class="btn-data-modal" onclick="closeDataModal()">关闭</button>
+      <button class="btn-data-modal" onclick="tryDownloadJson()">⬇ 下载文件</button>
+      <button class="btn-data-modal primary" onclick="copyDataText()">复制数据</button>
+    `;
+    setTimeout(() => { ta.select(); }, 100);
+  } else {
+    title.textContent = '导入数据';
+    hint.innerHTML = '请将之前复制或下载的数据<strong>粘贴到下方</strong>，点击「确认导入」即可还原。<br>也可以点「选择文件」直接导入 .json 文件。';
+    ta.value = '';
+    ta.readOnly = false;
+    ta.placeholder = '将数据粘贴到这里…';
+    actions.innerHTML = `
+      <button class="btn-data-modal" onclick="closeDataModal()">取消</button>
+      <button class="btn-data-modal" onclick="document.getElementById('importInput').click()">选择文件</button>
+      <button class="btn-data-modal primary" onclick="importFromText()">确认导入</button>
+    `;
+  }
+}
+
+function closeDataModal() {
+  document.getElementById('data-modal').classList.remove('show');
+}
+
+function copyDataText() {
+  const ta = document.getElementById('dataTextarea');
+  ta.select();
+  try {
+    navigator.clipboard.writeText(ta.value).then(() => {
+      showToast('✅ 数据已复制！');
+    }).catch(() => {
+      document.execCommand('copy');
+      showToast('✅ 数据已复制！');
+    });
+  } catch(e) {
+    document.execCommand('copy');
+    showToast('✅ 数据已复制！');
+  }
+}
+
+function tryDownloadJson() {
+  const json = buildExportJson();
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+  try {
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `Ho位整理表_${dateStr}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    showToast('✅ 文件下载中…');
+  } catch(e) {
+    showToast('⚠ 当前浏览器不支持下载，请使用「复制数据」');
+  }
+}
+
+function importFromText() {
+  const text = document.getElementById('dataTextarea').value.trim();
+  if (!text) { showToast('⚠ 请先粘贴数据'); return; }
+  parseAndImport(text);
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { parseAndImport(e.target.result); };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function parseAndImport(text) {
+  try {
+    const d = JSON.parse(text);
+
+    function normalizeEntry(e) {
+      // status may be a string (v4+) or a number (v3 and below)
+      let statusIdx = 0;
+      if (typeof e.status === 'string') {
+        const idx = STATUSES.indexOf(e.status);
+        statusIdx = idx >= 0 ? idx : 0;
+      } else if (typeof e.status === 'number') {
+        statusIdx = e.status >= 0 && e.status < STATUSES.length ? e.status : 0;
+      }
+      return { module: e.module || '', character: e.character || '', status: statusIdx };
+    }
+
+    if (d.columns && Array.isArray(d.columns)) {
+      columns = d.columns.map(col => ({
+        name: col.name || '',
+        colorIdx: col.colorIdx ?? 0,
+        entries: (col.entries || []).map(normalizeEntry),
+      }));
+      nextColorIdx = d.nextColorIdx || columns.length;
+    } else if (Array.isArray(d)) {
+      columns = d.map((entries, i) => ({
+        name: ['Ho1','Ho2','Ho3','Ho4','无Ho'][i] || `栏目${i+1}`,
+        colorIdx: i,
+        entries: (entries || []).map(normalizeEntry),
+      }));
+      nextColorIdx = columns.length;
+    } else { throw new Error(); }
+
+    saveState(); render();
+    closeDataModal();
+    showToast('✅ 数据导入成功！');
+  } catch(e) {
+    showToast('⚠ 数据格式有误，导入失败');
+  }
+}
+
+function buildExportJson() {
+  // Convert internal numeric status → human-readable string for portability
+  const exportCols = columns.map(col => ({
+    name: col.name,
+    colorIdx: col.colorIdx,
+    entries: col.entries.map(e => ({
+      module: e.module,
+      character: e.character,
+      status: STATUSES[e.status] ?? STATUSES[0],
+    }))
+  }));
+  return JSON.stringify({ version: 4, columns: exportCols, nextColorIdx }, null, 2);
+}
+
+function exportData() { openDataModal('export'); }
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
@@ -1056,6 +1324,10 @@ function downloadImage() {
   const a = document.createElement('a');
   a.href = _currentDataUrl; a.download = 'Ho位整理表.png'; a.click();
 }
+
+document.getElementById('data-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeDataModal();
+});
 
 document.getElementById('img-modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
